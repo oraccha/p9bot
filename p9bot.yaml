@@ -1,0 +1,10 @@
+twitter:
+    username: p9bot
+    password: glendab0t
+
+feed:
+    - http://d.hatena.ne.jp/oraccha/rss2
+    - http://ninetimes.cat-v.org/index.atom
+    - http://graverobbers.blogspot.com/feeds/posts/default
+    - http://d.hatena.ne.jp/m-shiba/rss2
+    - http://inferno-os.blogspot.com/feeds/posts/default
