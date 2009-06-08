@@ -9,8 +9,9 @@ import time
 import feedparser
 import yaml
 
-LASTFILE = './p9bot.timestamp'
-CONFFILE = './p9bot.yaml'
+rootdir = os.path.dirname(os.path.abspath(__file__))
+LASTFILE = rootdir + '/p9bot.timestamp'
+CONFFILE = rootdir + '/p9bot.yaml'
 
 TWITTER_REALM = 'Twitter API'
 TWITTER_URL = 'http://twitter.com/statuses/update.xml'
