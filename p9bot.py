@@ -7,13 +7,11 @@ import urllib2
 import urlparse
 import time
 import feedparser
+import yaml
 
 FETCH_MAX = 10
-LASTFILE = './p9bot.timestamp'
-LISTFILE = './p9bot.list'
-
-TWITTER_USERNAME = 'p9bot'
-TWITTER_PASSWORD = 'glendab0t'
+LASTFILE = '/home/croceo/p9bot/p9bot.timestamp'
+CONFFILE = '/home/croceo/p9bot/p9bot.yaml'
 
 TWITTER_REALM = 'Twitter API'
 TWITTER_URL = 'http://twitter.com/statuses/update.xml'
@@ -21,10 +19,15 @@ TWITTER_URL = 'http://twitter.com/statuses/update.xml'
 class TwitterBot:
     now = last = 0.0
 
-    def __init__(self, user, passwd):
+    def __init__(self):
         self.read_last()
-        self.now = time.time()
+        self.now = time.mktime(time.gmtime())
 
+        y = yaml.load(open(CONFFILE))
+        self.target = y['feed']
+        self.config = y['twitter']
+        user = self.config['username']
+        passwd = self.config['password']
         parsed_url = urlparse.urlparse(TWITTER_URL)
         handler = urllib2.HTTPBasicAuthHandler()
         handler.add_password(TWITTER_REALM, parsed_url.hostname, user, passwd)
@@ -64,6 +67,7 @@ class TwitterBot:
 
             try:
                 date = time.mktime(e['updated_parsed'])
+                print date, self.last, self.now
                 if self.last > date:
                     break
 
@@ -84,26 +88,18 @@ def main():
 	limit = int(sys.argv[1])
 
     entries = []
-    p9bot = TwitterBot(TWITTER_USERNAME, TWITTER_PASSWORD)
+    p9bot = TwitterBot()
 
-    try:
-        f = open(LISTFILE, 'r')
-        try:
-            for target in f:
-                if target[0] == '#':
-                    continue
+    for target in p9bot.target:
+        if target[0] == '#':
+            continue
 
-                title, author, url = p9bot.open(target)
-                for date, etitle, link in p9bot.fetch():
-                    fdate = time.strftime("%b %d, %H:%M:%S", \
-                                              time.localtime(date))
-                    msg = "%s (%s), %s, %s" % (etitle, title, fdate, link)
-                    entries.append({'date' : date, 'msg' : msg})
-                    entries.sort(key=lambda h : h['date'], reverse=False)
-        finally:
-            f.close()
-    except IOError:
-        return
+        title, author, url = p9bot.open(target)
+        for date, etitle, link in p9bot.fetch():
+            fdate = time.strftime("%b %d, %H:%M:%S", time.localtime(date))
+            msg = "%s (%s), %s, %s" % (etitle, title, fdate, link)
+            entries.append({'date' : date, 'msg' : msg})
+            entries.sort(key=lambda h : h['date'], reverse=False)
 
     elen = len(entries)
     for i in range(max(0, elen - limit), elen):
