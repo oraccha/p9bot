@@ -9,9 +9,8 @@ import time
 import feedparser
 import yaml
 
-FETCH_MAX = 10
-LASTFILE = '/home/croceo/p9bot/p9bot.timestamp'
-CONFFILE = '/home/croceo/p9bot/p9bot.yaml'
+LASTFILE = './p9bot.timestamp'
+CONFFILE = './p9bot.yaml'
 
 TWITTER_REALM = 'Twitter API'
 TWITTER_URL = 'http://twitter.com/statuses/update.xml'
@@ -67,7 +66,6 @@ class TwitterBot:
 
             try:
                 date = time.mktime(e['updated_parsed'])
-                print date, self.last, self.now
                 if self.last > date:
                     break
 
