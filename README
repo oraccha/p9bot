@@ -1,2 +1,7 @@
 p9bot: Plan 9/Inferno Twitter Bot.
+	- p9bot.py
+	- p9bot.yaml
 
+glendabot: Retweet of Plan 9 tweets bot.
+	- glendabot.py
+	- config.json
