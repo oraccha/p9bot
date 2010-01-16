@@ -47,7 +47,7 @@ if 'results' in data:
         opener = urllib2.build_opener(handler)
         urllib2.install_opener(opener)
         try:
-            print('Reweeting ', str(id), '...')
+            print('Reweeting ' + str(id) + '...')
             f = urllib2.urlopen(url, urllib.urlencode({'id' : str(id)}))
         except urllib2.HTTPError, msg:
             print(msg)
