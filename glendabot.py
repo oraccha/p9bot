@@ -4,7 +4,6 @@ import os
 import sys
 import urllib
 import urllib2
-import urlparse
 import json
 
 rootdir = os.path.dirname(os.path.abspath(__file__))
