@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 
 import os
 import sys
@@ -30,7 +30,6 @@ if 'results' in data:
     for x in reversed(data['results']):
         id = x['id']
         if id <= lastid: continue
-        config['lastid'] = lastid = id
 
         text =  x['text']
         ng = False
@@ -46,9 +45,12 @@ if 'results' in data:
         opener = urllib2.build_opener(handler)
         urllib2.install_opener(opener)
         try:
-            print('Reweeting ' + str(id) + '...')
+            #print('Reweeting ' + str(id) + '...')
             f = urllib2.urlopen(url, urllib.urlencode({'id' : str(id)}))
+            config['lastid'] = lastid = id
         except urllib2.HTTPError, msg:
+            # A HTTP 403 error returns if the upper limit hits.
+            print('Reweeting ' + str(id) + '...')
             print(msg)
             break
 
